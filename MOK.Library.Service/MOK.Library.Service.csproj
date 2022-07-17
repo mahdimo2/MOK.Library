@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="powershell.exe -Command $bin = ('..\MOK.Library.API\bin\net5.0') ; If (!(Test-Path $bin)) { md $bin } ; Copy-Item '$(ProjectDir)$(OutDir)*.*' $bin -Force  -Include '*.dll' ;&#xD;&#xA;powershell.exe -Command $bin = ('..\MOK.Library.API\bin\publish') ; If (!(Test-Path $bin)) { md $bin } ; Copy-Item '$(ProjectDir)$(OutDir)*.*' $bin -Force  -Include '*.dll' ;" />
+	</Target>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\MOK.Framework\MOK.Framework.csproj" />
+	  <ProjectReference Include="..\MOK.Library.Domain\MOK.Library.Domain.csproj" />
+	</ItemGroup>
+	
+</Project>

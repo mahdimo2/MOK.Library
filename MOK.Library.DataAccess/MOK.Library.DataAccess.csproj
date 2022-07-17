@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<SkipFunctionsDepsCopy>true</SkipFunctionsDepsCopy>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DbContextes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MOK.Framework\MOK.Framework.csproj" />
+    <ProjectReference Include="..\MOK.Library.Domain\MOK.Library.Domain.csproj" />
+  </ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="powershell.exe -Command $bin = ('..\MOK.Library.API\bin\net5.0') ; If (!(Test-Path $bin)) { md $bin } ; Copy-Item '$(ProjectDir)$(OutDir)*.*' $bin -Force  -Include '*.dll' ;&#xD;&#xA;powershell.exe -Command $bin = ('..\MOK.Library.API\bin\publish') ; If (!(Test-Path $bin)) { md $bin } ; Copy-Item '$(ProjectDir)$(OutDir)*.*' $bin -Force  -Include '*.dll' ;" />
+	</Target>
+
+</Project>
